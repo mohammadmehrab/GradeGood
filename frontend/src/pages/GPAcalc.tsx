@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import './styling.css';
 
 const GPAcalc: React.FC = () =>{
     const [courseID, setCourseID] = useState("");
