@@ -2,6 +2,9 @@ import styles from './HomePage.module.css'
 
 export default function HomePage() {
 
+    const submit = () => {
+    }
+
     return (
         <div>
             <h1 className={styles.title}>Welcome To GradeGood</h1>
@@ -19,7 +22,7 @@ export default function HomePage() {
                     <label htmlFor="confirm-password-input">Confirm Password:</label>
                     <input id="confirm-password-input" type="password" />
                 </div>
-                <button className={styles.createAccountBtn}>Create Account</button>
+                <button className={styles.createAccountBtn} onClick={submit}>Create Account</button>
             </form>
         </div>
     )
