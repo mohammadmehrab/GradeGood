@@ -4,7 +4,9 @@
   "description": "CS 3354 Group Project",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently \"npm run dev --prefix frontend\" \"npm run dev --prefix backend\""
+    "backend": "cd backend && nodemon --exec tsx src/server.ts && cd ..",
+    "frontend": "cd frontend && vite && cd ..",
+    "start": "concurrently \"npm run backend\" \"npm run frontend\""
   },
   "repository": {
     "type": "git",
@@ -20,9 +22,35 @@
   "homepage": "https://github.com/mohammadmehrab/GradeGood#readme",
   "dependencies": {
     "@types/node": "^22.13.14",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "@prisma/client": "^6.5.0",
+    "express": "^5.1.0",
+    "prisma": "^6.5.0",
+    "tsx": "^4.19.3",
+    "@types/react-router-dom": "^5.3.3",
+    "bootstrap": "^5.3.3",
+    "firebase": "^11.6.0",
+    "pg": "^8.14.1",
+    "react": "^19.0.0",
+    "react-bootstrap": "^2.10.9",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.4.1"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.13.14",
+    "typescript": "^5.8.2",
+    "@eslint/js": "^9.21.0",
+    "@types/pg": "^8.11.11",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.21.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^15.15.0",
+    "typescript-eslint": "^8.24.1",
+    "vite": "^6.2.0"
   }
 }
