@@ -10,10 +10,8 @@ const GPAcalc: React.FC = () =>{
     const [msg, setMsg] = useState("");
     
     const GPAcalculation =()=>{
-        //Add up the weightage of every policy, check if they add up to 100
-        const weight = policy.reduce((sum,pol) => sum + Number(pol.weightage),0);
-        if (weight !== 100){
-            setMsg("Your weightage needs to add up to be 100% for proper GPA calculation!");
+        // Call input validation function to check for invalid/exceptional inputs
+        if(!checkInputs()){
             return;
         }
 
@@ -88,25 +86,64 @@ const GPAcalc: React.FC = () =>{
         }
     }
 
+    // Update changes of input when policy fields are typed
     const handleChange =(i: number, field: string, value: number|string)=>{
-        const pol = [...policy];
-        if(field === "grade" && (Number(value) < 0 || Number(value) > 100)){
-            setMsg("Error: Grade must be in range of 0 to 100");
-                return;
-        }
-
-        if(field === "weightage" && (Number(value) < 0 || Number(value) > 100)){
-            setMsg("Error: Weightage must be in range of 0 to 100");
-                return;
-        }
-        
+        const pol = [...policy]; 
         pol[i] = {...pol[i], [field]:value};
         setPolicy(pol)
     }
 
+    // Check all inputs
+    const checkInputs=()=>{
+        // If any of the fields are blank
+        if(courseID.trim() === "" || courseName.trim() === "" || policy.some((pol) => pol.name.trim() === "")){
+            setMsg("Error: You must have left some fields empty!");
+            return false;
+        }
+        // If policy length is not in range
+        if(policy.some(p => p.name.length < 1 || p.name.length > 15)){
+            setMsg("Error: Your policy must be in length between 1 to 15.");
+            return false;
+        }
+
+        // If courseID is not a 4 digit integer
+        if(!/^\d{4}$/.test(courseID)){
+            setMsg("Error: Your course ID must be a 4 digit integer!");
+            return false;
+        }
+        // if course name length is not in range
+        if(courseName.length < 1 || courseName.length > 15){
+            setMsg("Error: Your course name must be in length between 1 to 15.");
+            return false;
+        }
+
+         //Add up the weightage of every policy, check if they add up to 100
+        const weight = policy.reduce((sum,pol) => sum + Number(pol.weightage),0);
+        if (weight !== 100){
+            setMsg("Error: Total weightage needs to add up to 100. ");
+            return false;
+        }
+
+        //check every policy's grade and weightage to see if they are in range
+        for (const p of policy){
+            if(p.weightage < 0 || p.weightage > 100){
+                setMsg("Error: Weightage must be in range of 0 to 100. Also input must solely be integer...");
+                return false
+            }
+            if(p.grade < 0 || p.grade > 100){
+                setMsg("Error: Grade must be in range of 0 to 100. Also input must solely be integer...");
+                return false;
+            }
+        }
+
+        // return true if every check is passed
+        return true;
+    }
+
     return (
         <div>
-            <span className='heading'>GPA CALCULATOR</span>
+            {/* Heading texts */}
+            <span className='heading'>GPA CALCULATOR</span> 
             <h2>Enter your course ID, name, and up to 5 policies</h2>
             <input 
             type="input"
@@ -115,6 +152,8 @@ const GPAcalc: React.FC = () =>{
             value={courseID}
             onChange={(e) => setCourseID(e.target.value)}
             />
+
+            {/* input boxes */}
             <input 
             type="input"
             placeholder='Course Name'
@@ -147,6 +186,7 @@ const GPAcalc: React.FC = () =>{
                     />
                 </div>
             ))}
+            {/* buttons to add, remove policy, reset inputs, and ccalculate GPA */}
             <button
             onClick={newPolicy}
             disabled={policy.length >= 5}
@@ -160,7 +200,7 @@ const GPAcalc: React.FC = () =>{
             <button onClick={GPAcalculation} className='input_submit'>Calculate GPA</button>
             <button onClick={resetInputs} className='input_submit'>Reset fields</button>
             
-
+            {/* Display results */}
             <div>
                 
                 <h3>Course ID: {courseID}</h3>
