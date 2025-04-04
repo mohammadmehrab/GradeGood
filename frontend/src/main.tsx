@@ -11,18 +11,3 @@ createRoot(document.getElementById('root')!).render(
     </BrowserRouter>
   </StrictMode>,
 )
-
-
-
-
-// const config = {
-//     user: import.meta.env.VITE_PGUSER,
-//     password: import.meta.env.VITE_PGPASSWORD,
-//     host: import.meta.env.VITE_PGHOST,
-//     port: import.meta.env.VITE_PGPORT,
-//     database: import.meta.env.VITE_PGDATABASE
-// }
-
-// export const pool = new pg.Pool(config)
-
-console.log("main test")

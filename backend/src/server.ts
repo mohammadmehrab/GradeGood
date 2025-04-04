@@ -1,5 +1,8 @@
 import express, { Request, RequestHandler, Response } from 'express'
 import { prisma } from './prisma'
+import dotenv from 'dotenv'
+
+dotenv.config({path: '../.env'})
 
 
 const app = express()
