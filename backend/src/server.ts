@@ -32,6 +32,7 @@ app.get('/users/:id', async (req: Request, res: Response) => {
     res.send(result)
 })
 
+
 app.post('/users', (async (req: Request, res: Response) => {
 
     const body: User = req.body
@@ -61,6 +62,19 @@ app.post('/users', (async (req: Request, res: Response) => {
 
     
 }) as RequestHandler)
+
+app.get('/users/:id/courses', async (req: Request, res: Response) => {//return all courses given user id
+    const result = await prisma.user.findMany({
+        where:{
+            id: parseInt(req.params.id)
+        }
+        })
+
+    res.send(result)
+})
+
+
+
 
 
 

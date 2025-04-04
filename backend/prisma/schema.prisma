@@ -22,7 +22,7 @@ model User {
 }
 
 model Course {
-  id            Int          @id @default(autoincrement())
+  courseId      Int          @id @default(autoincrement())
   name          String
   creditHours   Float
   grade         Float
