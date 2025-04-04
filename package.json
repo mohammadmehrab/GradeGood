@@ -1,0 +1,28 @@
+{
+  "name": "gradegood",
+  "version": "1.0.0",
+  "description": "CS 3354 Group Project",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"npm run dev --prefix frontend\" \"npm run dev --prefix backend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohammadmehrab/GradeGood.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/mohammadmehrab/GradeGood/issues"
+  },
+  "homepage": "https://github.com/mohammadmehrab/GradeGood#readme",
+  "dependencies": {
+    "@types/node": "^22.13.14",
+    "nodemon": "^3.1.9"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
