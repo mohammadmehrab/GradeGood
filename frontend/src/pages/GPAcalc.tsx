@@ -23,44 +23,36 @@ const GPAcalc: React.FC = () =>{
         let gpaFin = 0;
         if(gradeFin >= 93){
             gpaFin = 4.0;
-            setMsg("Truly the greatest in this course.");
         }
         else if(gradeFin >= 90){
             gpaFin = 3.67;
-            setMsg("One more push for that 4.0 and you are set!");
         }
         else if(gradeFin >= 87){
             gpaFin = 3.33;
-            setMsg("You are one step closer to excellence.");
         }
         else if(gradeFin >= 83){
             gpaFin = 3.0;
-            setMsg("This is great. Can you perform better though?");
         }
         else if(gradeFin >= 80){
             gpaFin = 2.67;
-            setMsg("You are really one tough and determined student. Keep it going.")
         }
         else if(gradeFin >= 77){
             gpaFin = 2.33;
-            setMsg("I see you put a bit more effort than average.");
         }
         else if(gradeFin >= 73){
             gpaFin = 2.0;
-            setMsg("You made it to the skin of your teeth.");
         }
         else if(gradeFin >= 70){
             gpaFin = 1.67;
-            setMsg("Please get yourself to the finish line!");
         }
         else{
             gpaFin = 0.0;
-            setMsg("God Gives His Toughest Battles To His Strongest Soldiers. Prove again you are one of them.");
+            
         }
         
         // Set the final GPA
         setCourseGPA(gpaFin);
-        
+        setMsg("GPA Successfully Calculated.");
     };
 
     // Reset all inputs of all fields
