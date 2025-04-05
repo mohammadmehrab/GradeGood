@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "target": "es2022",
+      "module": "esnext",
+      "moduleResolution": "node",
+      "outDir": "./dist",
+      "rootDir": ".",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "jsx": "react-jsx"
+    },
+    "include": ["tests/**/*.ts", "tests/**/*.tsx"],
+    "exclude": ["node_modules"]
+  }

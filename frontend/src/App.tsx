@@ -10,6 +10,7 @@ import GradeInputPage from "./pages/GradeInputPage";
 import GPAcalc from "./pages/GPAcalc";
 
 function App() {
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light mb-4 shadow-sm">
@@ -41,7 +42,7 @@ function App() {
       </nav>
 
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<PrivateRoute><HomePage /></PrivateRoute>} />
         <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
         <Route path="/inputGrade" element={<PrivateRoute><GradeInputPage /></PrivateRoute>} />
         <Route path="/gpacalc" element={<PrivateRoute><GPAcalc /></PrivateRoute>} />

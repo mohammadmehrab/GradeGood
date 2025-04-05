@@ -42,5 +42,5 @@ import {
   
     const value = { currentUser, signup, login, logout, resetPassword };
   
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={value as AuthContextProps}>{children}</AuthContext.Provider>;
   }
