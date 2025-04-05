@@ -13,6 +13,16 @@ export default function Signup() {
     try {
       setError("");
       await signup(email, password);
+      await fetch('http://localhost:3000/users', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          name: ""
+        })
+      })
       navigate("/");
     } catch (err: any) {
       setError("Failed to sign up: " + err.message);
