@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { login, logout, signup, resetPassword } from '../auth';
+import { login, logout, signup, resetPassword } from './auth';
 import type { User } from 'firebase/auth';
 
 vi.mock('firebase/auth', () => {
