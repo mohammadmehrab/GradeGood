@@ -1,8 +1,5 @@
 import { Link, Route, Routes } from "react-router-dom";
 import Dashboard from "./components/dashboard";
-import Login from "./components/login";
-import Signup from "./components/signup";
-import ForgotPassword from "./components/forgotpassword";
 import PrivateRoute from "./components/privateroute";
 import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
@@ -30,26 +27,17 @@ function App() {
               <li className="nav-item">
                 <Link className="nav-link" to="/dashboard">Dashboard</Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/login">Login</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/signup">Signup</Link>
-              </li>
             </ul>
           </div>
         </div>
       </nav>
 
       <Routes>
-        <Route path="/" element={<PrivateRoute><HomePage /></PrivateRoute>} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
         <Route path="/inputGrade" element={<PrivateRoute><GradeInputPage /></PrivateRoute>} />
         <Route path="/gpacalc" element={<PrivateRoute><GPAcalc /></PrivateRoute>} />
-        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </div>
   );
