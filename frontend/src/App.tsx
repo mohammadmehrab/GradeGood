@@ -8,16 +8,21 @@ import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import GradeInputPage from "./pages/GradeInputPage";
 import GPAcalc from "./pages/GPAcalc";
+import BookSvg from './assets/Book.svg'
+
 
 function App() {
 
   return (
     <div>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light mb-4 shadow-sm">
+      {/* <nav className="navbar navbar-expand-lg navbar-light bg-light mb-4 shadow-sm">
         <div className="container">
-          <Link className="navbar-brand" to="/">Home</Link>
+          <div className="flex flex-row">
+            <img src={BookSvg} alt='Logo'/>
+            <Link className="navbar-brand" to="/">GradeGood</Link>
+          </div>
           <div className="collapse navbar-collapse">
-            <ul className="navbar-nav ms-auto">
+            <ul className="navbar-nav ms-auto bg-red-100">
               <li className="nav-item">
                 <Link className="nav-link" to="/profile">Profile</Link>
               </li>
@@ -39,7 +44,16 @@ function App() {
             </ul>
           </div>
         </div>
+      </nav> */}
+      <nav className="bg-white">
+        <div>
+          <div className="flex flex-row">
+            <img src={BookSvg} alt='Logo'/>
+            <Link className="" to="/">GradeGood</Link>
+          </div>
+        </div>
       </nav>
+
 
       <Routes>
         <Route path="/" element={<PrivateRoute><HomePage /></PrivateRoute>} />

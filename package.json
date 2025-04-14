@@ -22,6 +22,7 @@
   "homepage": "https://github.com/mohammadmehrab/GradeGood#readme",
   "dependencies": {
     "@prisma/client": "^6.5.0",
+    "@tailwindcss/vite": "^4.1.3",
     "@types/node": "^22.13.14",
     "@types/react-router-dom": "^5.3.3",
     "bootstrap": "^5.3.3",
@@ -36,6 +37,7 @@
     "react-bootstrap": "^2.10.9",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.4.1",
+    "tailwindcss": "^4.1.3",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.3"
   },
