@@ -145,7 +145,7 @@ const GPAcalc: React.FC = () => {
   };
 
   return (
-    <div className={styles.regContain}>
+    <div className={`${styles.regContain} h-full`}>
       {/* Heading texts */}
       <h1 className={styles.heading}>GPA Calculation</h1>
       <div className={styles.course_info}>
