@@ -73,39 +73,4 @@
   margin: 50px 0;
 }
 
-/*Home*/
 
-.homepage {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-}
-
-.header {
-  width: 100%;
-  justify-content: flex-end;
-  background-color: pink;
-  gap: 10px;
-}
-
-.header .button {
-  padding: 10px 15px;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.about {
-  background-color: yellow;
-}
-
-.profile {
-  background-color: lightblue;
-}
-
-.logout {
-  background-color: lightcoral;
-}
