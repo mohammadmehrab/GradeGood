@@ -2,7 +2,7 @@ import styles from "./HomePage.module.css";
 
 export default function HomePage() {
   return (
-    <div>
+    <div className="h-full flex flex-col justify-center">
       <h1 className={styles.title}>Welcome To GradeGood</h1>
       <h2 className={styles.subtitle}>
         Change your study game today by creating an account.

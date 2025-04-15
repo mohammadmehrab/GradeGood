@@ -31,7 +31,7 @@ export default function GradeInputPage() {
   };
 
   return (
-    <div>
+    <div className="h-full">
       <h1 className={styles.title}>Course Grade Input</h1>
       <h2 className={styles.subtitle}>Enter your course details below.</h2>
       <div className={`${styles.inputForm} ${styles.testBorder}`}>
