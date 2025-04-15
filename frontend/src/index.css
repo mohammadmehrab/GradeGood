@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
-body {
+html, body, #root {
     background-color: #C4E9D2;
+    margin: 0;
     height: 100%;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
