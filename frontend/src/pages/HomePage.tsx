@@ -8,7 +8,7 @@ export default function HomePage() {
         <div className= "w-1/2 flex items-center">
       <img src="/homepagepic.png"
                     alt="homepic"
-                    className="w-200 h-100 mr-5"/>
+                    className="w-150 h-100 mr-5"/>
        </div>
        <div className="w-1/2 flex flex-col space-y-4 ml-10 mr-10">
       <div className="mt-8">
