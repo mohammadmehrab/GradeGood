@@ -13,7 +13,8 @@ app.use(express.json())
 app.use(cors())
 
 type User = {
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
 }
 
@@ -61,14 +62,15 @@ app.post('/users', (async (req: Request, res: Response) => {
 
     const body: User = req.body
 
-    if(!body || typeof body.name !== 'string' || typeof body.email !== 'string') {
+    if(!body || typeof body.firstName !== 'string' || typeof body.email !== 'string' || typeof body.lastName !== 'string') {
         return res.status(400).send({error: "Name and email are required."})
     }
 
     try {
         const result = await prisma.user.create({
             data: {
-                name: body.name,
+                firstName: body.firstName,
+                lastName: body.lastName,
                 email: body.email
             }
         })
@@ -84,8 +86,30 @@ app.post('/users', (async (req: Request, res: Response) => {
         
     }
 
+
     
 }) as RequestHandler)
+
+app.put('/users', async (req: Request, res: Response): Promise<any> => {
+    const { email, firstName, lastName } = req.body;
+  
+    if (!email || !firstName || !lastName) {
+      return res.status(400).send({ error: "Email and name are required." });
+    }
+  
+    try {
+      const user = await prisma.user.update({
+        where: { email },
+        data: { firstName, lastName },
+      });
+  
+      res.send(user);
+    } catch (err: any) {
+      console.error('Error updating user:', err);
+      res.status(500).send({ error: "Could not update user." });
+    }
+  });
+  
 
 app.get('/users/:id/courses', async (req: Request, res: Response) => {//return all courses given user id
     const result = await prisma.user.findMany({
