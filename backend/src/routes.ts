@@ -36,11 +36,19 @@ router.put("/profile", async (req: Request, res: Response): Promise<any> => {
   }
 
   try {
-    const updatedUser = await prisma.user.update({
-      where: { email },
-      data: { 
-        firstName,
-        lastName, }
+    const updatedUser = await prisma.user.upsert({
+      where: {
+        email: email,
+      },
+      update: {
+        firstName: firstName,
+        lastName: lastName,
+      },
+      create: {
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+      },
     });
 
     res.json(updatedUser);
