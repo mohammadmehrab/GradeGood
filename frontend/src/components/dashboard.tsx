@@ -33,7 +33,7 @@ export default function Dashboard() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, name: "" }),
+        body: JSON.stringify({ email, firstName: "", lastName: "" }),
       });
     } catch (err: any) {
       setError("Signup failed: " + err.message);
@@ -141,7 +141,8 @@ export default function Dashboard() {
                         },
                         body: JSON.stringify({
                           email: auth.currentUser?.email,
-                          name: "",
+                          firstName: "",
+                          lastName: "",
                         }),
                       });
                     } catch (err: any) {
@@ -192,7 +193,8 @@ export default function Dashboard() {
                         },
                         body: JSON.stringify({
                           email: auth.currentUser?.email,
-                          name: "",
+                          firstName: "",
+                          lastName: "",
                         }),
                       });
                     } catch (err: any) {
