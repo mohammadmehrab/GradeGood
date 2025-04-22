@@ -2,6 +2,7 @@ import { signInWithGoogle, useAuth } from "../contexts/authcontext";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { auth } from "../firebase";
+import AddEventPage from "../pages/AddEventPage";
 
 export default function Dashboard() {
   const { currentUser, login, signup, resetPassword, logout } = useAuth();
@@ -250,11 +251,28 @@ export default function Dashboard() {
 
   // Authenticated view
   return (
-    <div className="container mt-5">
+    <div className="container flex justify-center mt-5 ">
       <div className="card shadow">
-        <div className="card-body">
+        <div className="w-[400px] flex items-center flex-col">
           <h2 className="card-title">Welcome, {currentUser.email}</h2>
-          <button className="btn btn-danger mt-3 w-100" onClick={handleLogout}>
+          <h2 className= "mt-40 font-bold text-3xl self-start ">
+            Dashboard
+          </h2>
+          <div className = "flex items-center flex-col">
+         
+          <button className = "mt-7 w-[400px] mb-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 "onClick={() => navigate("../addevent")}>
+            add event
+          </button>
+        
+          <button className = "w-[400px] mb-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 "onClick={() => navigate("../addevent")}>
+            view courses
+          </button>
+       
+          <button className = "w-[400px] mb-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4"onClick={() => navigate("../profile")}>
+           profile
+          </button>
+          </div>
+            <button className="btn btn-danger mt-3 w-100" onClick={handleLogout}>
             Log Out
           </button>
         </div>
