@@ -35,6 +35,18 @@
     align-items: center;
     justify-content: center;
   }
+
+  .input_contain {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .policy_container {
+    display: flex;
+    margin-bottom: 15px;
+    gap: 30px;
+  }
   
   .submitBtn {
     margin-top: 10px;
