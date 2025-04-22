@@ -34,6 +34,12 @@ export default function AppLayout() {
             <Link to="/addevent" className="hover:text-green-600">
               Add Event
             </Link>
+            <Link to ="/coursesetup" className="hover:text-green-600">
+              Course Setup
+            </Link>
+            <Link to ="/goalset" className="hover:text-green-600">
+              Goal Setting
+            </Link>
           </div>
         </div>
       </nav>

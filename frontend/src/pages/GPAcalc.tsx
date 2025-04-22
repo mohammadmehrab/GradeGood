@@ -42,8 +42,17 @@ const GPAcalc: React.FC = () => {
       gpaFin = 2.0;
     } else if (gradeFin >= 70) {
       gpaFin = 1.67;
-    } else {
-      gpaFin = 0.0;
+    } else if (gradeFin >= 67){
+      gpaFin = 1.33;
+    } else if (gradeFin >= 63){
+      gpaFin = 1.00
+    } else if (gradeFin >= 60){
+      gpaFin = 0.67;
+    } else if (gradeFin >= 57){
+      gpaFin = 0.33;
+    }
+    else{
+      gpaFin = 0.00;
     }
 
     // Set the final GPA

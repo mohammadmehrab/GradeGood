@@ -7,6 +7,7 @@ import GradeInputPage from "./pages/GradeInputPage";
 import GPAcalc from "./pages/GPAcalc";
 import AppLayout from "./components/AppLayout";
 import AddEventPage from "./pages/AddEventPage";
+import GoalSet from "./pages/GoalSet";
 
 function App() {
   return (
@@ -69,6 +70,15 @@ function App() {
           element={
             <PrivateRoute>
               <AddEventPage />
+            </PrivateRoute>
+          }
+        />
+        
+        <Route
+          path="/goalset"
+          element={
+            <PrivateRoute>
+              <GoalSet/>
             </PrivateRoute>
           }
         />
