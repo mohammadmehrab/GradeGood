@@ -1,0 +1,145 @@
+body {
+    background-color: #C4E9D2;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  }
+  
+  .reg-contain{
+    display:flex;
+    flex-direction: column;
+    margin-left: 50px;
+    margin-top:50px;
+  }
+  
+  .course_info{
+    display:flex;
+    gap:30px;
+    margin-bottom: 20px;
+  }
+  
+  
+  .policy_container{
+    display:flex;
+    margin-bottom: 15px;
+    gap:30px;
+  }
+  
+  .policy_area{
+    border: 1px solid #ccc;
+    padding: 1px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background-color: beige;
+  }
+  
+  .input_contain{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .input_box_policy{
+    padding: 5px;
+    width: 200px;
+    height:25px;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 0 5px black;
+    background-color: white;
+  }
+  
+  .inp_pol{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .input_box_grade{
+    padding: 5px;
+    width: 200px;
+    height:25px;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 0 5px black;
+    background-color: white;
+  }
+  
+  .button_contain{
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem 0;
+  }
+  
+  .gradeList {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  .gradeList li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0;
+  }
+  
+  .button_reg{
+    width:200px;
+    padding: 10px;
+    border-radius: 20px;
+    border: none;
+    font-size: 15px;
+    background-color: rgba(0, 122, 255, 0.15);
+    border-radius: 5px;
+  
+    color:rgba(0, 122, 255, 1);
+  }
+  
+  .button_reg:hover{
+    color:rgb(66, 88, 111);
+  }
+  
+  .button_small{
+    width:100px;
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: none;
+    font-size: 14px;
+    background-color: rgba(0, 122, 255, 0.15);
+    border-radius: 5px;
+    margin-top: 5px;
+    color:rgba(0, 122, 255, 1);
+  }
+  
+  .button_small:hover{
+    color:rgb(66, 88, 111);
+  }
+  
+  .heading{
+    font-size: 40px;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .subheading{
+    text-align: center;
+    font-size: 20px;
+    margin: 50px 0;
+  
+  }
+  
+  .result{
+    color: red;
+    font-weight: bold;
+    margin-top: 1rem;
+  }
+  
+  .average{
+    font-weight: bold;
+  }
+  
+  .feedback{
+    font-style: italic;
+    margin-bottom: 1rem;
+  }
+  
+  .chart_contain{
+    margin-top: 2rem;
+  }
