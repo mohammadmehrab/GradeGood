@@ -3,7 +3,7 @@ import Dashboard from "./components/dashboard";
 import PrivateRoute from "./components/privateroute";
 import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
-import GradeInputPage from "./pages/GradeInputPage";
+import CourseSetUp from "./pages/CourseSetUp";
 import GPAcalc from "./pages/GPAcalc";
 import AppLayout from "./components/AppLayout";
 import AddEventPage from "./pages/AddEventPage";
@@ -50,10 +50,10 @@ function App() {
           }
         />
         <Route
-          path="/inputGrade"
+          path="/coursesetup"
           element={
             <PrivateRoute>
-              <GradeInputPage />
+              <CourseSetUp />
             </PrivateRoute>
           }
         />
