@@ -8,6 +8,7 @@ import GPAcalc from "./pages/GPAcalc";
 import AppLayout from "./components/AppLayout";
 import AddEventPage from "./pages/AddEventPage";
 import GoalSet from "./pages/GoalSet";
+import PomodoroPage from "./pages/PomodoroPage";
 
 function App() {
   return (
@@ -79,6 +80,15 @@ function App() {
           element={
             <PrivateRoute>
               <GoalSet/>
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/pomodoropage"
+          element={
+            <PrivateRoute>
+              <PomodoroPage/>
             </PrivateRoute>
           }
         />
