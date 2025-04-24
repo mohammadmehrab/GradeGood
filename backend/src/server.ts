@@ -2,6 +2,7 @@ import express, { Request, RequestHandler, Response } from "express";
 import { prisma } from "./prisma";
 import dotenv from "dotenv";
 import cors from "cors";
+import { Event } from "@prisma/client";
 
 dotenv.config({ path: "../.env" });
 
@@ -147,5 +148,25 @@ app.post("/courses", (async (req: Request, res: Response) => {
     console.error("Error creating course:", err);
   }
 }) as RequestHandler);
+
+app.get("/events/:userId", async (req: Request, res: Response) => {
+  //return all courses given user id
+  const userId = parseInt(req.params.userId);
+
+  if (isNaN(userId)) {
+    res.status(400).json({ error: "Invalid User ID" });
+  }
+
+  try {
+    const events: Event[] = await prisma.event.findMany({
+      where: { userId },
+    });
+
+    res.json(events);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch events" });
+  }
+});
 
 app.listen(port);

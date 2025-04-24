@@ -18,8 +18,8 @@ model User {
   email    String   @unique
   firstName     String
   lastName     String
-  // password String
   courses  Course[]
+  events Event[]
 }
 
 model Course {
@@ -27,11 +27,40 @@ model Course {
   name          String
   creditHours   Float
   grade         Float
-  // gradingPolicy Json
+  gradingPolicy Json @default({})
+  events        Event[]
   user          User         @relation(fields: [userId], references: [id])
   userId        Int
-  // assignments   Assignment[]
 }
+
+model Event {
+  eventId Int @id @default(autoincrement())
+  title String
+  description String
+  startTime DateTime
+  endTime DateTime
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  course Course? @relation(fields:[courseId], references: [courseId])
+  courseId Int?
+  recurrence Recurrence @default(NONE)
+}
+
+enum Recurrence {
+  NONE
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+// model EventTime {
+//   id Int @id @default(autoincrement())
+//   event Event @relation(fields: [eventId], references: [eventId])
+//   eventId Int
+//   startDateTime DateTime
+//   endDateTime DateTime
+// }
 
 // model Assignment {
 //   id       Int    @id @default(autoincrement())

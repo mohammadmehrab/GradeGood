@@ -8,6 +8,8 @@ import GPAcalc from "./pages/GPAcalc";
 import AppLayout from "./components/AppLayout";
 import AddEventPage from "./pages/AddEventPage";
 import GoalSet from "./pages/GoalSet";
+// import Calendar from "./pages/Calendar";
+import CalendarApp from "./pages/CalendarTest";
 
 function App() {
   return (
@@ -73,12 +75,20 @@ function App() {
             </PrivateRoute>
           }
         />
-        
+
         <Route
           path="/goalset"
           element={
             <PrivateRoute>
-              <GoalSet/>
+              <GoalSet />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/calendar"
+          element={
+            <PrivateRoute>
+              <CalendarApp />
             </PrivateRoute>
           }
         />
