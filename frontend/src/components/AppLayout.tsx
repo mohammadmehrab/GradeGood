@@ -23,9 +23,6 @@ export default function AppLayout() {
             <Link to="/profile" className="hover:text-green-600">
               Profile
             </Link>
-            <Link to="/gpacalc" className="hover:text-green-600">
-              GPA Calculator
-            </Link>
             <Link to="/dashboard" className="hover:text-green-600">
               Dashboard
             </Link>
@@ -41,13 +38,9 @@ export default function AppLayout() {
             <Link to ="/pomodoropage" className="hover:text-green-600">
               Study Timer
             </Link>
-            <Link to="/about" className="hover:text-green-600">About Us</Link>
-            <Link to="/profile" className="hover:text-green-600">Profile</Link>
-            <Link to="/inputGrade" className="hover:text-green-600">Input Grade</Link>
-            <Link to="/gpacalc" className="hover:text-green-600">GPA Calculator</Link>
-            <Link to="/dashboard" className="hover:text-green-600">Dashboard</Link>
-            <Link to="/addevent" className="hover:text-green-600">Add Event</Link>
-            <Link to="/viewClasses" className="hover:text-green-600">View Classes</Link> {/* ✅ NEW */}
+            <Link to="/viewClasses" className="hover:text-green-600">
+              View Classes
+            </Link>
           </div>
         </div>
       </nav>
