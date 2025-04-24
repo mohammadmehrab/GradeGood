@@ -9,36 +9,10 @@ import AppLayout from "./components/AppLayout";
 import AddEventPage from "./pages/AddEventPage";
 import GoalSet from "./pages/GoalSet";
 import PomodoroPage from "./pages/PomodoroPage";
+import ViewClasses from "./pages/ViewClasses"; 
 
 function App() {
   return (
-    // <div className="min-h-screen">
-    //   <nav className="bg-white border-b border-green-200">
-    //     <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-    //       <div className="flex items-center gap-2">
-    //         <img src={BookSvg} alt="Logo" className="w-6 h-6" />
-    //         <Link to="/" className="text-lg font-semibold text-gray-900">
-    //           GradeGood
-    //         </Link>
-    //       </div>
-
-    //       {/* Nav Links */}
-    //       <div className="flex gap-6 text-sm font-medium text-gray-600">
-    //         <Link to="/profile" className="hover:text-green-600">
-    //           Profile
-    //         </Link>
-    //         <Link to="/inputGrade" className="hover:text-green-600">
-    //           Input Grade
-    //         </Link>
-    //         <Link to="/gpacalc" className="hover:text-green-600">
-    //           GPA Calculator
-    //         </Link>
-    //         <Link to="/dashboard" className="hover:text-green-600">
-    //           Dashboard
-    //         </Link>
-    //       </div>
-    //     </div>
-    //   </nav>
     <Routes>
       <Route element={<AppLayout />}>
         <Route path="/" element={<HomePage />} />
@@ -92,13 +66,23 @@ function App() {
             </PrivateRoute>
           }
         />
+
+        
+        <Route
+          path="/viewclasses"
+          element={
+            <PrivateRoute>
+              <ViewClasses />
+            </PrivateRoute>
+          }
+        />
+
         <Route path="/about" element={<HomePage />} />
         <Route path="/dashboard" element={<Dashboard />} />
       </Route>
     </Routes>
-
-    // </div>
   );
 }
 
 export default App;
+
