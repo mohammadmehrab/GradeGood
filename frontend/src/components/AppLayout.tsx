@@ -22,12 +22,6 @@ export default function AppLayout() {
             <Link to="/profile" className="hover:text-green-600">
               Profile
             </Link>
-            <Link to="/coursesetup" className="hover:text-green-600">
-              Course SetUp
-            </Link>
-            <Link to="/gpacalc" className="hover:text-green-600">
-              GPA Calculator
-            </Link>
             <Link to="/dashboard" className="hover:text-green-600">
               Dashboard
             </Link>
