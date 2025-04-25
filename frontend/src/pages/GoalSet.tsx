@@ -122,8 +122,8 @@ export default function GoalSet(){
           return false;
         }
         // if course name length is not in range
-        if (courseName.length < 1 || courseName.length > 15) {
-          setMsg("Error: Your course name must be in length between 1 to 15.");
+        if (courseName.length < 1 || courseName.length > 30) {
+          setMsg("Error: Your course name must be in length between 1 to 30.");
           setDisplayResult(true);
           return false;
         }
@@ -149,6 +149,11 @@ export default function GoalSet(){
             setMsg(
               "Error: Grade must be in range of 0 to 100. Also input must solely be integer..."
             );
+            setDisplayResult(true);
+            return false;
+          }
+          if (p.goal < 0 || p.goal > 100){
+            setMsg("Error: Goal must be in a range of 0 to 100.");
             setDisplayResult(true);
             return false;
           }
