@@ -201,8 +201,8 @@ export default function GoalSet(){
     }
 
     return(
-        <div className={styles.regContain}>
-            <h1 className={styles.heading}>Set Your Grade Goal</h1>
+        <div className="max-w-3xl mx-auto">
+            <h1 className="text-2xl font-bold mb-6 text-gray-900">Set Your Grade Goal</h1>
             <div className={styles.course_info}>
                 <div className={styles.input_contain}>
                 <label>
@@ -228,7 +228,7 @@ export default function GoalSet(){
             {policy.map((pol,i)=>{
                 const avg = findAvg(pol.progress);
                 return(
-                    <div key={i} className={styles.policy_area}>
+                    <div key={i} className="bg-white p-4 mb-6 rounded shadow border border-gray-200 space-y-4">
                         <h2>
                             <input
                                 value={pol.name} type="text" onChange={(e) => newPolicyName(i,e.target.value)}
@@ -273,7 +273,7 @@ export default function GoalSet(){
                                 }}
                                 className={styles.input_box_grade}
                             />
-                            <button onClick={()=> newGrade(i, progInputs[i])} className={styles.button_small}>
+                            <button onClick={()=> newGrade(i, progInputs[i])} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
                                 Add Grade
                             </button>
                         </div>
@@ -286,7 +286,7 @@ export default function GoalSet(){
                                     {pol.progress.map((grade, gIndex)=>(
                                         <li key={gIndex}>
                                             Grade {gIndex +1}: {grade}{" "}
-                                            <button onClick={()=>removeGrade(i,gIndex)} className={styles.button_small}>
+                                            <button onClick={()=>removeGrade(i,gIndex)} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
                                                 Remove
                                             </button>
                                         </li>
@@ -301,13 +301,13 @@ export default function GoalSet(){
             })}
 
             <div className={styles.button_contain}>
-                <button onClick={newPolicy} disabled={policy.length >= 5} className={styles.button_reg}>
+                <button onClick={newPolicy} disabled={policy.length >= 5} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
                     Add Policy
                 </button>
-                <button onClick={removePolicy} disabled={policy.length <= 1} className={styles.button_reg}>
+                <button onClick={removePolicy} disabled={policy.length <= 1} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
                     Remove Policy
                 </button>
-                <button onClick={handleSubmit} className={styles.button_reg}>
+                <button onClick={handleSubmit} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
                     Find GPA and Chart
                 </button>
             </div>
