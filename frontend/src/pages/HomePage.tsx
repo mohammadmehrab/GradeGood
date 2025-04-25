@@ -12,7 +12,7 @@ export default function HomePage() {
 
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl">
           {[
-            { title: "📊 GPA Calculator", desc: "Input courses, grades, and credits — we do the math and track your academic progress." },
+            { title: "📊 Goal Setting", desc: "Input courses, grades, and credits — we do the math and track your academic progress." },
             { title: "⏱️ Built-in Study Timer", desc: "Pomodoro timer to help keep you focused with balanced breaks." },
             { title: "📅 Course + Event Planner", desc: "Organize your classes and events with our custom calendar." }, ].map((f, i) => (
             <div
