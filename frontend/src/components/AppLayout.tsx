@@ -40,6 +40,9 @@ export default function AppLayout() {
             <Link to ="/pomodoropage" className="hover:text-green-600">
               Study Timer
             </Link>
+            <Link to ="/viewCourses" className="hover:text-green-600">
+              view courses
+            </Link>
           </div>
         </div>
       </nav>
