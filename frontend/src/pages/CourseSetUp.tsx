@@ -1,8 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./CourseSetUp.module.css";
 import { useAuth } from "../contexts/authcontext";
 import { submitCourse } from "../../../backend/src/gradeInput";
 
+
+type Course={ 
+  name: string;
+  courseId: number;
+  grade: number;
+  creditHours: number;
+  userId: number;
+}
 export default function GradeInputPage() {
 
   const [courseName, setCourseName] = useState("");
@@ -12,9 +20,39 @@ export default function GradeInputPage() {
   const [courseDetails, setCourseDetails] = useState<any[]>([]);
 
 
+  //pull user id , pull courses
+
+
   const { currentUser } = useAuth();
-  console.log(styles)
+  useEffect(()=> {
+    
+    
+    async function getUserCourses()
+    {
+
+      if(!currentUser)
+        {
+          return;
+        }
+      let res = await fetch(`http://localhost:3000/users?email=${currentUser.email}`);
+      let data = await res.json();
+      const userId = data.id;
+      res = await fetch(`http://localhost:3000/users/${userId}/courses`);
+      data = await res.json();
+      console.log(data);
+      
+      setCourseDetails(data.map((course:Course) => ( {name:course.name , creditHours:course.creditHours , grade:course.grade , schedule:[{day:[], startTime:"", endTime:""}]})));
+    }
+    getUserCourses();
+
+
+  },[currentUser])
+
+
+  //console.log(styles)
   const submit = async () => {
+
+
     // You can handle form submission logic here (e.g., state, validation, etc.)
     console.log(courseName, creditHours, grade,schedule);
 
