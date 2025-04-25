@@ -42,11 +42,42 @@ export default function ViewCoursesPage()
       },[currentUser])
 
 
-
-      return (
-      <div>  hello { 
-            courses.map((course,i) => (<div> {course.name} </div>) )
-        }
+//use this once db is working
+/*
+    <div className={styles.container}>
+        <h1>Your Courses</h1>
+        <div>
+        {courses.map((course, i) => (
+          <div key={i} className={styles.courseCard}>
+            <p><strong>Name:</strong> {course.name}</p>
+            <p><strong>Course ID:</strong> {course.courseId}</p>
+            <p><strong>Grade:</strong> {course.grade}</p>
+            <p><strong>Credit Hours:</strong> {course.creditHours}</p>
+            <p><strong>User ID:</strong> {course.userId}</p>
+          </div>
+        ))}
         </div>
-      )
+      </div>
+      */
+      return (
+        <div className={styles.container}>
+        <div className={styles.courseintro}>
+          <h1>Your Courses</h1>
+        </div>
+        <div className={styles.coursesList}>
+          {courses.map((course, i) => (
+            <div key={i} className={styles.courseCard}>
+              <p><strong>Name:</strong> {course.name}</p>
+              <p><strong>Course ID:</strong> {course.courseId}</p>
+              <p><strong>Grade:</strong> {course.grade}</p>
+              <p><strong>Credit Hours:</strong> {course.creditHours}</p>
+              <p><strong>User ID:</strong> {course.userId}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      );
+    
+   
 }
