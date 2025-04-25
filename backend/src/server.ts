@@ -2,7 +2,7 @@ import express, { Request, RequestHandler, Response } from "express";
 import { prisma } from "./prisma";
 import dotenv from "dotenv";
 import cors from "cors";
-import { Event } from "@prisma/client";
+import { Event, Recurrence } from "@prisma/client";
 
 dotenv.config({ path: "../.env" });
 
@@ -18,11 +18,28 @@ type User = {
   email: string;
 };
 
-type Course = {
+type CourseRequest = {
   name: string;
   creditHours: number;
   grade: number;
   userId: number;
+  schedule: ScheduleDay[];
+};
+
+type EventRequest = {
+  title: string;
+  description: string;
+  startTime: string;
+  endTime: string;
+  userId: number;
+  courseId?: number;
+  recurrence: Recurrence;
+};
+
+type ScheduleDay = {
+  dayOfWeek: string;
+  startTime: string;
+  endTime: string;
 };
 
 app.get("/", (req: Request, res: Response) => {
@@ -117,19 +134,21 @@ app.get("/users/:id/courses", async (req: Request, res: Response) => {
 });
 
 app.post("/courses", (async (req: Request, res: Response) => {
-  const body: Course = req.body;
+  const body: CourseRequest = req.body;
 
-  console.log(body);
+  // console.log(body);
 
   if (
     !body ||
     typeof body.name !== "string" ||
     isNaN(body.creditHours) ||
     isNaN(body.grade) ||
-    isNaN(body.userId)
+    isNaN(body.userId) ||
+    typeof body.schedule !== "object"
   ) {
     return res.status(400).send({
-      error: "Course name, Credit hours, Grade, and User ID are required.",
+      error:
+        "Course name, Credit hours, Grade, User ID, and Schedule are required.",
     });
   }
 
@@ -138,8 +157,23 @@ app.post("/courses", (async (req: Request, res: Response) => {
       data: {
         name: body.name,
         creditHours: body.creditHours,
-        grade: body.grade,
+        gradeLogs: {
+          create: [{ datetime: new Date(), grade: body.grade }],
+        },
         userId: body.userId,
+        events: {
+          create: body.schedule.map((day) => ({
+            title: body.name,
+            description: "",
+            startTime: timeToDate(day.startTime),
+            endTime: timeToDate(day.endTime),
+            userId: body.userId,
+            recurrence: Recurrence.WEEKLY,
+          })),
+        },
+      },
+      include: {
+        gradeLogs: true,
       },
     });
 
@@ -149,7 +183,7 @@ app.post("/courses", (async (req: Request, res: Response) => {
   }
 }) as RequestHandler);
 
-app.get("/events/:userId", async (req: Request, res: Response) => {
+app.get("/users/:userId/events", async (req: Request, res: Response) => {
   //return all courses given user id
   const userId = parseInt(req.params.userId);
 
@@ -168,5 +202,46 @@ app.get("/events/:userId", async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to fetch events" });
   }
 });
+
+app.post("/events", (async (req: Request, res: Response) => {
+  const body: EventRequest = req.body;
+
+  // console.log(body)
+
+  if (
+    !body ||
+    typeof body.title !== "string" ||
+    typeof body.description !== "string" ||
+    typeof body.startTime !== "string" ||
+    typeof body.endTime !== "string" ||
+    isNaN(body.userId)
+  ) {
+    return res.status(400).send({
+      error:
+        "Event title, description, start time, end time, and User ID are required.",
+    });
+  }
+
+  try {
+    const startTime = timeToDate(body.startTime);
+
+    const endTime = timeToDate(body.endTime);
+
+    const result = await prisma.event.create({
+      data: {
+        title: body.title,
+        description: body.description,
+        startTime: startTime,
+        endTime: endTime,
+        userId: body.userId,
+        recurrence: Recurrence.WEEKLY,
+      },
+    });
+
+    res.send(result);
+  } catch (err: any) {
+    console.error("Error creating event:", err);
+  }
+}) as RequestHandler);
 
 app.listen(port);

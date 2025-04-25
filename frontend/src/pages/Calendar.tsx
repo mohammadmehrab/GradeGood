@@ -1,36 +1,56 @@
+import { useCalendarApp, ScheduleXCalendar } from "@schedule-x/react";
+import {
+  CalendarEventExternal,
+  createViewDay,
+  createViewMonthAgenda,
+  createViewMonthGrid,
+  createViewWeek,
+} from "@schedule-x/calendar";
+import { createEventsServicePlugin } from "@schedule-x/events-service";
+
+import "@schedule-x/theme-default/dist/index.css";
 import { useEffect, useState } from "react";
 
-export default function Calendar() {
-  const [calendarRange, setCalendarRange] = useState<Date[]>([
-    new Date(),
-    new Date(),
-  ]);
+type CalendarProps = {
+  events: CalendarEventExternal[];
+};
+
+export default function Calendar(props: CalendarProps) {
+  const eventsService = useState(() => createEventsServicePlugin())[0];
+
+  console.log("prop events", props.events);
+
+  const calendar = useCalendarApp({
+    views: [
+      createViewDay(),
+      createViewWeek(),
+      createViewMonthGrid(),
+      createViewMonthAgenda(),
+    ],
+    // events: [
+    //   {
+    //     id: 1,
+    //     title: "Coffee with John",
+    //     start: "2025-04-26 10:05",
+    //     end: "2025-04-26 12:35",
+    //     description:
+    //       "blahasdasd asd asd asd asdasdsssssssssssssssssssasdasdasdasd",
+    //   },
+    //   {
+    //     id: 2,
+    //     title: "Ski trip",
+    //     start: "2025-04-27",
+    //     end: "2025-04-27",
+    //   },
+    // ],
+    events: props.events,
+    plugins: [eventsService],
+  });
 
   useEffect(() => {
-    const calendarRange = [new Date(), new Date()];
-    while (calendarRange[0].getDay() !== 0) {
-      calendarRange[0].setDate(calendarRange[0].getDate() - 1);
-    }
-    calendarRange[0].setHours(0, 0, 0, 0);
-    calendarRange[1].setDate(calendarRange[0].getDate() + 6);
-    calendarRange[1].setHours(23, 59, 59, 999);
-    setCalendarRange(calendarRange);
+    // get all events
+    eventsService.getAll();
   }, []);
 
-  return (
-    <div className="h-full flex border justify-center">
-      <div className="w-[95%] h-[80%]">
-        <div>{calendarRange.map((date) => date.toISOString()).join(", ")}</div>
-        <div>{calendarRange[1].toTimeString()}</div>
-        <div className="grid grid-cols-[50px_repeat(7,_1fr)] gap-2 bg-amber-500 py-[2px]">
-          <div className="bg-amber-50"></div>
-          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-            <div key={day} className="font-bold text-center text-xs">
-              {day}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+  return <ScheduleXCalendar calendarApp={calendar} />;
 }
