@@ -2,7 +2,6 @@ import { signInWithGoogle, useAuth } from "../contexts/authcontext";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { auth } from "../firebase";
-import AddEventPage from "../pages/AddEventPage";
 
 export default function Dashboard() {
   const { currentUser, login, signup, resetPassword, logout } = useAuth();
@@ -251,34 +250,43 @@ export default function Dashboard() {
     );
   }
 
-  // Authenticated view
   return (
-    <div className="container flex justify-center mt-5 ">
-      <div className="card shadow">
-        <div className="w-[400px] flex items-center flex-col">
-          <h2 className="card-title">Welcome, {currentUser.email}</h2>
-          <h2 className= "mt-40 font-bold text-3xl self-start ">
-            Dashboard
-          </h2>
-          <div className = "flex items-center flex-col">
-         
-          <button className = "mt-7 w-[400px] mb-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 "onClick={() => navigate("../addevent")}>
-            add event
+    <div className="flex justify-center items-center min-h-screen">
+      <div className="bg-white border border-green-200 shadow-xl rounded-2xl p-8 w-full max-w-md text-center">
+        <h2 className="text-4xl font-bold text-gray-900 mb-10">Dashboard</h2>
+  
+        <div className="flex flex-col gap-4">
+          <button
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-md transition"
+            onClick={() => navigate("../addevent")}
+          >
+            Add Event
           </button>
-        
-          <button className = "w-[400px] mb-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 "onClick={() => navigate("../addevent")}>
-            view courses
+  
+          <button
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-md transition"
+            onClick={() => navigate("../addevent")}
+          >
+            View Courses
           </button>
-       
-          <button className = "w-[400px] mb-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4"onClick={() => navigate("../profile")}>
-           profile
-          </button>
-          </div>
-            <button className="btn btn-danger mt-3 w-100" onClick={handleLogout}>
-            Log Out
+  
+          <button
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-md transition"
+            onClick={() => navigate("../profile")}
+          >
+            Profile
           </button>
         </div>
+  
+        <button
+          className="mt-6 w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-md transition"
+          onClick={handleLogout}
+        >
+          Log Out
+        </button>
       </div>
     </div>
   );
+  
+  
 }

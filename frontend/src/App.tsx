@@ -8,6 +8,9 @@ import GPAcalc from "./pages/GPAcalc";
 import AppLayout from "./components/AppLayout";
 import AddEventPage from "./pages/AddEventPage";
 import GoalSet from "./pages/GoalSet";
+import ViewCoursesPage from "./pages/ViewCoursesPage";
+import PomodoroPage from "./pages/PomodoroPage";
+import ViewClasses from "./pages/ViewClasses";
 import CalendarPage from "./pages/CalendarPage";
 
 function App() {
@@ -64,12 +67,38 @@ function App() {
             </PrivateRoute>
           }
         />
+
+        <Route
+          path="/pomodoropage"
+          element={
+            <PrivateRoute>
+              <PomodoroPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/viewCourses"
+          element={
+            <PrivateRoute>
+              <ViewCoursesPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/viewclasses"
+          element={
+            <PrivateRoute>
+              <ViewClasses />
+            </PrivateRoute>
+          }
+        />
+
         <Route path="/about" element={<HomePage />} />
         <Route path="/dashboard" element={<Dashboard />} />
       </Route>
     </Routes>
-
-    // </div>
   );
 }
 

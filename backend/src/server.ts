@@ -124,9 +124,9 @@ app.put("/users", async (req: Request, res: Response): Promise<any> => {
 
 app.get("/users/:id/courses", async (req: Request, res: Response) => {
   //return all courses given user id
-  const result = await prisma.user.findMany({
+  const result = await prisma.course.findMany({
     where: {
-      id: parseInt(req.params.id),
+      userId: parseInt(req.params.id),
     },
   });
 

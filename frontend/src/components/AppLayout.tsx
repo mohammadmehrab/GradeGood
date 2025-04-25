@@ -1,5 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
 import BookSvg from "../assets/Book.svg";
+
 export default function AppLayout() {
   return (
     <div className="flex flex-col h-screen">
@@ -40,12 +41,25 @@ export default function AppLayout() {
             <Link to="/goalset" className="hover:text-green-600">
               Goal Setting
             </Link>
+            <Link to ="/pomodoropage" className="hover:text-green-600">
+              Study Timer
+            </Link>
+
+            <Link to ="/viewCourses" className="hover:text-green-600">
+              view courses
+
+            <Link to="/viewClasses" className="hover:text-green-600">
+              View Classes
+
+            </Link>
           </div>
         </div>
       </nav>
+
       <main className="flex-grow overflow-auto">
         <Outlet />
       </main>
     </div>
   );
 }
+
