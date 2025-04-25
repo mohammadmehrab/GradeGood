@@ -27,7 +27,7 @@ model Course {
   name          String
   creditHours   Float
   grade         Float
-  gradingPolicy Json @default({})
+  gradingPolicy Json @default("{}")
   events        Event[]
   user          User         @relation(fields: [userId], references: [id])
   userId        Int
