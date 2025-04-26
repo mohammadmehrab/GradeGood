@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,44 +8,44 @@ datasource db {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
-  firstName     String
-  lastName     String
-  courses  Course[]
-  events Event[]
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  firstName String
+  lastName  String
+  courses   Course[]
+  events    Event[]
 }
 
 model Course {
-  courseId      Int          @id @default(autoincrement())
   name          String
   creditHours   Float
-  gradeLogs GradeLog[]
-  gradingPolicy Json @default("{}")
-  events        Event[]
-  user          User         @relation(fields: [userId], references: [id])
   userId        Int
+  courseId      Int        @id @default(autoincrement())
+  gradingPolicy Json       @default("{}")
+  user          User       @relation(fields: [userId], references: [id])
+  events        Event[]
+  gradeLogs     GradeLog[]
 }
 
 model GradeLog {
-  gradeLogId Int @id @default(autoincrement())
-  datetime DateTime
-  grade Float
-  course Course @relation(fields: [courseId], references: [courseId])
-  courseId Int
+  gradeLogId Int      @id @default(autoincrement())
+  datetime   DateTime
+  grade      Float
+  courseId   Int
+  course     Course   @relation(fields: [courseId], references: [courseId])
 }
 
 model Event {
-  eventId Int @id @default(autoincrement())
-  title String
+  eventId     Int        @id @default(autoincrement())
   description String
-  startTime DateTime
-  endTime DateTime
-  user User @relation(fields: [userId], references: [id])
-  userId Int
-  course Course? @relation(fields:[courseId], references: [courseId])
-  courseId Int?
-  recurrence Recurrence @default(NONE)
+  userId      Int
+  recurrence  Recurrence @default(NONE)
+  courseId    Int?
+  endTime     DateTime
+  startTime   DateTime
+  title       String
+  course      Course?    @relation(fields: [courseId], references: [courseId])
+  user        User       @relation(fields: [userId], references: [id])
 }
 
 enum Recurrence {
@@ -61,20 +55,3 @@ enum Recurrence {
   MONTHLY
   YEARLY
 }
-
-// model EventTime {
-//   id Int @id @default(autoincrement())
-//   event Event @relation(fields: [eventId], references: [eventId])
-//   eventId Int
-//   startDateTime DateTime
-//   endDateTime DateTime
-// }
-
-// model Assignment {
-//   id       Int    @id @default(autoincrement())
-//   name     String
-//   grade    Float
-//   type     String
-//   course   Course @relation(fields: [courseId], references: [id])
-//   courseId Int
-// }

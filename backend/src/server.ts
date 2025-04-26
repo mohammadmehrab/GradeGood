@@ -1,10 +1,11 @@
+import dotenv from "dotenv";
 import express, { Request, RequestHandler, Response } from "express";
 import { prisma } from "./prisma";
-import dotenv from "dotenv";
 import cors from "cors";
 import { Event, Recurrence } from "@prisma/client";
+import { timeToDate } from "./helper";
 
-dotenv.config({ path: "../.env" });
+dotenv.config({ path: "../../.env" });
 
 const app = express();
 const port = 3000;
@@ -127,6 +128,13 @@ app.get("/users/:id/courses", async (req: Request, res: Response) => {
   const result = await prisma.course.findMany({
     where: {
       userId: parseInt(req.params.id),
+    },
+    include: {
+      gradeLogs: {
+        orderBy: {
+          datetime: "desc", // 👈 descending = newest first
+        },
+      },
     },
   });
 
