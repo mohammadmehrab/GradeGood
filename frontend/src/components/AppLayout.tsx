@@ -26,17 +26,11 @@ export default function AppLayout() {
             <Link to="/calendar" className="hover:text-green-600">
               Calendar
             </Link>
-            <Link to="/gpacalc" className="hover:text-green-600">
-              GPA Calculator
-            </Link>
             <Link to="/dashboard" className="hover:text-green-600">
               Dashboard
             </Link>
             <Link to="/addevent" className="hover:text-green-600">
               Add Event
-            </Link>
-            <Link to="/coursesetup" className="hover:text-green-600">
-              Course Setup
             </Link>
             <Link to="/goalset" className="hover:text-green-600">
               Goal Setting
@@ -46,7 +40,7 @@ export default function AppLayout() {
             </Link>
 
             <Link to="/viewCourses" className="hover:text-green-600">
-              view courses
+              View Courses
             </Link>
             <Link to="/viewClasses" className="hover:text-green-600">
               View Classes
