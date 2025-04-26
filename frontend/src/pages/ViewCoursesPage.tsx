@@ -2,12 +2,20 @@ import { useEffect, useState } from "react";
 import styles from "./ViewCoursesPage.module.css";
 import { useAuth } from "../contexts/authcontext";
 
-type Course = {
-  name: string;
-  courseId: number;
+type GradeLog = {
+  gradeLogId: number;
+  datetime: string;
   grade: number;
+  courseId: number;
+};
+
+type Course = {
+  courseId: number;
   creditHours: number;
+  gradingPolicy: object;
+  name: string;
   userId: number;
+  gradeLogs: GradeLog[];
 };
 
 export default function ViewCoursesPage() {
@@ -65,7 +73,7 @@ export default function ViewCoursesPage() {
               <strong>Course ID:</strong> {course.courseId}
             </p>
             <p>
-              <strong>Grade:</strong> {course.grade}
+              <strong>Grade:</strong> {course.gradeLogs[0].grade}
             </p>
             <p>
               <strong>Credit Hours:</strong> {course.creditHours}
