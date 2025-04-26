@@ -1,4 +1,4 @@
-const timeToDate = (timeStr: string): Date => {
+export const timeToDate = (timeStr: string): Date => {
   const date = new Date();
 
   const [time, modifier] = timeStr.split(" ");

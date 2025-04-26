@@ -6,7 +6,10 @@
     "test": "jest && cd frontend && vitest run",
     "backend": "cd backend && nodemon --exec tsx src/server.ts && cd ..",
     "frontend": "cd frontend && vite && cd ..",
-    "start": "concurrently \"npm run backend\" \"npm run frontend\""
+    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "dbgen": "npx prisma generate --schema ./backend/prisma/schema.prisma",
+    "dbpull": "npx prisma db pull --schema ./backend/prisma/schema.prisma",
+    "dbstudio": "npx prisma studio --schema ./backend/prisma/schema.prisma"
   },
   "repository": {
     "type": "git",
