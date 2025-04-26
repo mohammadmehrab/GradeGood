@@ -123,6 +123,8 @@ export default function AddEventPage() {
       throw "no date chosen";
     }
 
+    alert("Event added! Check your calendar!")
+
     const res = await fetch("http://localhost:3000/events", {
       method: "POST",
       headers: {
