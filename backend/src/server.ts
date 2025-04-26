@@ -242,7 +242,7 @@ app.post("/events", (async (req: Request, res: Response) => {
         startTime: startTime,
         endTime: endTime,
         userId: body.userId,
-        recurrence: Recurrence.WEEKLY,
+        recurrence: body.recurrence || Recurrence.NONE,
       },
     });
 
