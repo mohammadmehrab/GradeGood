@@ -115,6 +115,10 @@ export default function AddEventPage() {
       dateChosen
     );
 
+    if (!dateChosen) {
+      throw "no date chosen";
+    }
+
     const res = await fetch("http://localhost:3000/events", {
       method: "POST",
       headers: {
@@ -125,6 +129,7 @@ export default function AddEventPage() {
         description: eventDescription,
         startTime: startTimeChosen,
         endTime: endTimeChosen,
+        date: dateChosen.toLocaleString("sv"),
         userId: currentUserId,
       }),
     });

@@ -144,8 +144,8 @@ const ViewGrades: React.FC = () => {
       } as Course,
     ]);
 
-    console.log(courseSetup);
-    console.log(currentUserId);
+    console.log("course setup:", courseSetup);
+    console.log("current user id:", currentUserId);
 
     alert("Course Added!");
 

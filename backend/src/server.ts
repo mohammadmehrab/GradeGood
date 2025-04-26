@@ -3,7 +3,7 @@ import express, { Request, RequestHandler, Response } from "express";
 import { prisma } from "./prisma";
 import cors from "cors";
 import { Event, Recurrence } from "@prisma/client";
-import { timeToDate } from "./helper";
+import { datetimeToDate, timeToDate } from "./helper";
 
 dotenv.config({ path: "../../.env" });
 
@@ -35,6 +35,7 @@ type EventRequest = {
   userId: number;
   courseId?: number;
   recurrence: Recurrence;
+  date: string;
 };
 
 type ScheduleDay = {
@@ -173,8 +174,8 @@ app.post("/courses", (async (req: Request, res: Response) => {
           create: body.schedule.map((day) => ({
             title: body.name,
             description: "",
-            startTime: timeToDate(day.startTime),
-            endTime: timeToDate(day.endTime),
+            startTime: timeToDate(day.dayOfWeek, day.startTime),
+            endTime: timeToDate(day.dayOfWeek, day.endTime),
             userId: body.userId,
             recurrence: Recurrence.WEEKLY,
           })),
@@ -222,18 +223,32 @@ app.post("/events", (async (req: Request, res: Response) => {
     typeof body.description !== "string" ||
     typeof body.startTime !== "string" ||
     typeof body.endTime !== "string" ||
+    typeof body.date !== "string" ||
     isNaN(body.userId)
   ) {
     return res.status(400).send({
       error:
-        "Event title, description, start time, end time, and User ID are required.",
+        "Event title, description, start time, end time, date, and User ID are required.",
     });
   }
 
   try {
-    const startTime = timeToDate(body.startTime);
+    const startTimeTemp = timeToDate("Monday", body.startTime);
 
-    const endTime = timeToDate(body.endTime);
+    const endTimeTemp = timeToDate("Monday", body.endTime);
+
+    const startTime = new Date(body.date);
+
+    startTime.setHours(
+      startTimeTemp.getHours(),
+      startTimeTemp.getMinutes(),
+      0,
+      0
+    );
+
+    const endTime = new Date(body.date);
+
+    endTime.setHours(endTimeTemp.getHours(), endTimeTemp.getMinutes(), 0, 0);
 
     const result = await prisma.event.create({
       data: {
