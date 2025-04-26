@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { useAuth } from "../contexts/authcontext";
+import { Recurrence } from "@prisma/client";
 
 type ValuePiece = Date | null;
 
@@ -15,6 +16,8 @@ export default function AddEventPage() {
   const [eventDescription, setEventDescription] = useState<string>("");
 
   const [currentUserId, setCurrentUserId] = useState<number>(0);
+
+  const [recurrence, setRecurrence] = useState<Recurrence>(Recurrence.NONE);
 
   useEffect(() => {
     async function getCurrentUserId() {
@@ -112,7 +115,8 @@ export default function AddEventPage() {
       eventDescription,
       startTimeChosen,
       endTimeChosen,
-      dateChosen
+      dateChosen,
+      recurrence
     );
 
     if (!dateChosen) {
@@ -131,6 +135,7 @@ export default function AddEventPage() {
         endTime: endTimeChosen,
         date: dateChosen.toLocaleString("sv"),
         userId: currentUserId,
+        recurrence: recurrence,
       }),
     });
 
@@ -256,6 +261,26 @@ export default function AddEventPage() {
             value={textDate}
             onChange={(event) => changeTextDate(event.target.value)}
           />
+        </div>
+
+        <div className="flex flex-col">
+          <label htmlFor="add-event-page-event-date-input" className="m-2">
+            Recurrence
+          </label>
+          <select
+            name="recurrence"
+            value={recurrence}
+            onChange={(event) =>
+              setRecurrence(event.target.value as keyof typeof Recurrence)
+            }
+            className="w-full p-1 border rounded bg-white"
+          >
+            {Object.values(Recurrence).map((day) => (
+              <option key={day} value={day}>
+                {day}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="flex flex-col items-center">
