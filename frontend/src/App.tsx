@@ -8,10 +8,9 @@ import GPAcalc from "./pages/GPAcalc";
 import AppLayout from "./components/AppLayout";
 import AddEventPage from "./pages/AddEventPage";
 import GoalSet from "./pages/GoalSet";
-import ViewCoursesPage from "./pages/ViewCoursesPage";
 import PomodoroPage from "./pages/PomodoroPage";
-import ViewClasses from "./pages/ViewClasses";
 import CalendarPage from "./pages/CalendarPage";
+import ViewCourses from "./pages/ViewCourses";
 
 function App() {
   return (
@@ -77,20 +76,11 @@ function App() {
           }
         />
 
-        <Route
-          path="/viewCourses"
+<Route
+          path="/viewcourses"
           element={
             <PrivateRoute>
-              <ViewCoursesPage />
-            </PrivateRoute>
-          }
-        />
-
-        <Route
-          path="/viewclasses"
-          element={
-            <PrivateRoute>
-              <ViewClasses />
+              <ViewCourses />
             </PrivateRoute>
           }
         />

@@ -25,17 +25,42 @@ type ScheduleDay = {
 
 const ViewGrades: React.FC = () => {
   const { currentUser } = useAuth();
-
   const [currentUserId, setCurrentUserId] = useState<number>(-1);
+  const [courses, setCourses] = useState<Course[]>([]);
+
+
+  const calculateGPA = (grade: number): number => {
+    if (grade >= 90) return 4.0;
+    if (grade >= 80) return 3.0;
+    if (grade >= 70) return 2.0;
+    if (grade >= 60) return 1.0;
+    return 0.0;
+  };
+
+  const calculateCumulativeGPA = (courses: Course[]): number => {
+    if (courses.length === 0) return 0;
+    
+    let totalGradePoints = 0;
+    let totalCreditHours = 0;
+    
+    courses.forEach(course => {
+      if (course.gradeLogs.length > 0) {
+        const grade = course.gradeLogs[0].grade;
+        const gpa = calculateGPA(grade);
+        totalGradePoints += gpa * course.creditHours;
+        totalCreditHours += course.creditHours;
+      }
+    });
+    
+    return totalCreditHours > 0 ? totalGradePoints / totalCreditHours : 0;
+  };
 
   useEffect(() => {
     async function getCurrentUserId() {
       const res = await fetch(
         `http://localhost:3000/users?email=${currentUser?.email}`
       );
-
       const data = await res.json();
-
       setCurrentUserId(data.id);
     }
 
@@ -52,22 +77,10 @@ const ViewGrades: React.FC = () => {
         `http://localhost:3000/users/${currentUserId}/courses`
       );
       const data = await res.json();
-      console.log(data);
       setCourses(data);
     }
     if (currentUserId) getUserCourses();
   }, [currentUserId]);
-
-  const [courses, setCourses] = useState<Course[]>([]);
-
-  // const [form, setForm] = useState<Course>({
-  //   courseId: -1,
-  //   creditHours: -1,
-  //   gradingPolicy: {},
-  //   name: "",
-  //   userId: -1,
-  //   gradeLogs: [],
-  // });
 
   const [courseSetup, setCourseSetup] = useState({
     name: "",
@@ -80,7 +93,6 @@ const ViewGrades: React.FC = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    console.log({ name, value });
     if (["creditHours", "grade"].includes(name)) {
       setCourseSetup((prev) => ({ ...prev, [name]: Number(value) }));
     } else {
@@ -88,40 +100,7 @@ const ViewGrades: React.FC = () => {
     }
   };
 
-  // const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { name, value } = e.target;
-  //   setForm((prev) => ({
-  //     ...prev,
-  //     [name]: name === "grade" || name === "gpa" ? Number(value) : value,
-  //   }));
-  // };
-
-  // const handleAdd = () => {
-  //   if (
-  //     form.courseId &&
-  //     form.creditHours &&
-  //     form.gradeLogs &&
-  //     form.gradingPolicy &&
-  //     form.name &&
-  //     form.userId
-  //   ) {
-  //     setCourses((prev) => [...prev, form]);
-  //     setForm({
-  //       courseId: -1,
-  //       creditHours: -1,
-  //       gradingPolicy: {},
-  //       name: "",
-  //       userId: -1,
-  //       gradeLogs: [],
-  //     });
-  //   } else {
-  //     alert("Please fill in all fields!");
-  //   }
-  // };
-
   const deleteDayEntry = (index: number) => {
-    // console.log("schedule before delete", courseSetup.schedule);
-    // console.log(index);
     setCourseSetup((old) => ({
       ...old,
       schedule:
@@ -132,43 +111,91 @@ const ViewGrades: React.FC = () => {
   };
 
   const addCourse = async () => {
-    setCourses((old) => [
-      ...old,
-      {
-        courseId: -1,
+
+    if (!courseSetup.name || courseSetup.creditHours <= 0 || courseSetup.grade < 0 || courseSetup.grade > 100) {
+      alert("Please fill in all fields with valid values!");
+      return;
+    }
+
+    try {
+
+      const newCourse = {
+        courseId: -1, 
         creditHours: courseSetup.creditHours,
         gradingPolicy: {},
         name: courseSetup.name,
-        userId: -1,
-        gradeLogs: [{ datetime: "", grade: courseSetup.grade }],
-      } as Course,
-    ]);
-
-    console.log("course setup:", courseSetup);
-    console.log("current user id:", currentUserId);
-
-    alert("Course Added!");
-
-    const res = await fetch(`http://localhost:3000/courses`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ...courseSetup,
         userId: currentUserId,
-      }),
-    });
+        gradeLogs: [{ datetime: new Date().toISOString(), grade: courseSetup.grade, gradeLogId: -1, courseId: -1 }],
+      } as Course;
 
-    const data = await res.json();
+      setCourses((old) => [...old, newCourse]);
 
-    console.log(data);
+      const res = await fetch(`http://localhost:3000/courses`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...courseSetup,
+          userId: currentUserId,
+        }),
+      });
+
+      const data = await res.json();
+      
+
+      setCourses(old => old.map(c => 
+        c.courseId === -1 && c.name === newCourse.name ? { ...c, courseId: data.courseId } : c
+      ));
+
+      setCourseSetup({
+        name: "",
+        creditHours: 0,
+        grade: 0,
+        schedule: [{ dayOfWeek: "", startTime: "", endTime: "" }],
+      });
+
+      alert("Course Added Successfully!");
+    } catch (error) {
+      console.error("Error adding course:", error);
+
+      setCourses(old => old.filter(c => c.courseId !== -1 || c.name !== courseSetup.name));
+      alert("Failed to add course. Please try again.");
+    }
+  };
+
+
+  const deleteCourse = async (courseId: number) => {
+    if (!window.confirm("Are you sure you want to delete this course?")) {
+      return;
+    }
+
+    try {
+
+      setCourses(old => old.filter(course => course.courseId !== courseId));
+
+
+      await fetch(`http://localhost:3000/courses/${courseId}`, {
+        method: "DELETE",
+      });
+
+      alert("Course deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting course:", error);
+
+      const res = await fetch(
+        `http://localhost:3000/users/${currentUserId}/courses`
+      );
+      const data = await res.json();
+      setCourses(data);
+      alert("Failed to delete course. Please try again.");
+    }
   };
 
   return (
     <div className="min-h-screen bg-green-100 p-8">
       <div className="max-w-5xl mx-auto space-y-8">
-        {/* Course Set Up Section */}
+
         <div className="bg-green-100 border border-black p-6 rounded">
           <h2 className="text-3xl font-bold text-center mb-1">Course Set Up</h2>
           <p className="text-center mb-6">Enter your course details below.</p>
@@ -181,6 +208,7 @@ const ViewGrades: React.FC = () => {
                 value={courseSetup.name}
                 onChange={handleChange}
                 className="w-full p-1 border rounded"
+                required
               />
             </div>
             <div>
@@ -188,19 +216,25 @@ const ViewGrades: React.FC = () => {
               <input
                 name="creditHours"
                 type="number"
+                min="0"
+                step="0.5"
                 value={courseSetup.creditHours}
                 onChange={handleChange}
                 className="w-full p-1 border rounded"
+                required
               />
             </div>
             <div>
-              <label>Grade:</label>
+              <label>Grade (0-100):</label>
               <input
                 name="grade"
                 type="number"
+                min="0"
+                max="100"
                 value={courseSetup.grade}
                 onChange={handleChange}
                 className="w-full p-1 border rounded"
+                required
               />
             </div>
           </div>
@@ -219,16 +253,13 @@ const ViewGrades: React.FC = () => {
                           ...newSchedule[i],
                           dayOfWeek: event.target.value,
                         };
-
                         return { ...old, schedule: newSchedule };
                       })
                     }
                     className="w-full p-1 border rounded"
+                    required
                   >
-                    <option value="" disabled>
-                      Select a day
-                    </option>
-                    {/* <option>Weekdays</option> */}
+                    <option value="" disabled>Select a day</option>
                     {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
                       .filter(
                         (day) =>
@@ -240,11 +271,6 @@ const ViewGrades: React.FC = () => {
                       .map((day) => (
                         <option key={day}>{day}</option>
                       ))}
-                    {/* <option>Monday</option>
-                    <option>Tuesday</option>
-                    <option>Wednesday</option>
-                    <option>Thursday</option>
-                    <option>Friday</option> */}
                   </select>
                 </div>
                 <div>
@@ -260,11 +286,11 @@ const ViewGrades: React.FC = () => {
                           ...newSchedule[i],
                           startTime: event.target.value,
                         };
-
                         return { ...old, schedule: newSchedule };
                       })
                     }
                     className="w-full p-1 border rounded"
+                    required
                   />
                 </div>
                 <div>
@@ -280,11 +306,11 @@ const ViewGrades: React.FC = () => {
                           ...newSchedule[i],
                           endTime: event.target.value,
                         };
-
                         return { ...old, schedule: newSchedule };
                       })
                     }
                     className="w-full p-1 border rounded"
+                    required
                   />
                 </div>
                 <div className="flex justify-center items-center">
@@ -297,43 +323,6 @@ const ViewGrades: React.FC = () => {
                 </div>
               </React.Fragment>
             ))}
-
-            {/* <div>
-              <label>Day:</label>
-              <select
-                name="day"
-                value={courseSetup.day}
-                onChange={handleChange}
-                className="w-full p-1 border rounded"
-              >
-                <option>Weekdays</option>
-                <option>Monday</option>
-                <option>Tuesday</option>
-                <option>Wednesday</option>
-                <option>Thursday</option>
-                <option>Friday</option>
-              </select>
-            </div>
-            <div>
-              <label>Time Start:</label>
-              <input
-                name="timeStart"
-                type="time"
-                value={courseSetup.timeStart}
-                onChange={handleChange}
-                className="w-full p-1 border rounded"
-              />
-            </div>
-            <div>
-              <label>Time Finish:</label>
-              <input
-                name="timeFinish"
-                type="time"
-                value={courseSetup.timeFinish}
-                onChange={handleChange}
-                className="w-full p-1 border rounded"
-              />
-            </div> */}
           </div>
           <button
             className="mt-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -353,7 +342,6 @@ const ViewGrades: React.FC = () => {
                       { dayOfWeek: "", startTime: "", endTime: "" },
                     ],
                   };
-
                 return old;
               })
             }
@@ -362,67 +350,39 @@ const ViewGrades: React.FC = () => {
           </button>
         </div>
 
-        {/* Divider Line */}
         <hr className="border-t-2 border-black" />
 
-        {/* View Grades Section */}
-        {/* <h1 className="text-2xl font-bold text-gray-900">View Courses</h1>
-        <div className="bg-white p-4 rounded shadow border border-gray-200 space-y-4">
-          <input
-            type="text"
-            name="code"
-            value={form.code}
-            placeholder="Course Code (e.g., CS 3354)"
-            onChange={handleFormChange}
-            className="w-full p-2 border rounded"
-          />
-          <input
-            type="text"
-            name="title"
-            value={form.title}
-            placeholder="Course Title (e.g., Software Engineering)"
-            onChange={handleFormChange}
-            className="w-full p-2 border rounded"
-          />
-          <input
-            type="number"
-            name="grade"
-            value={form.grade || ""}
-            placeholder="Grade (e.g., 94)"
-            onChange={handleFormChange}
-            className="w-full p-2 border rounded"
-          />
-          <input
-            type="number"
-            name="gpa"
-            step="0.1"
-            value={form.gpa || ""}
-            placeholder="GPA (e.g., 4.0)"
-            onChange={handleFormChange}
-            className="w-full p-2 border rounded"
-          />
-          <button
-            onClick={handleAdd}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-          >
-            Add
-          </button>
-        </div> */}
+        <div className="bg-white p-4 rounded shadow border border-gray-200">
+          <h3 className="text-xl font-bold mb-2">Cumulative GPA</h3>
+          <p className="text-lg">
+            {calculateCumulativeGPA(courses).toFixed(2)}
+          </p>
+        </div>
 
-        {/* Course Cards */}
-        {courses.map((course, index) => (
+        {courses.map((course) => (
           <div
-            key={index}
-            className="bg-white p-4 mb-4 rounded shadow-sm border border-gray-200"
+            key={course.courseId}
+            className="bg-white p-4 mb-4 rounded shadow-sm border border-gray-200 relative"
           >
-            <p className="font-medium text-sm text-gray-800">
-              {course.name}: {course.creditHours}
+            <button
+              onClick={() => deleteCourse(course.courseId)}
+              className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
+              title="Delete course"
+            >
+              ×
+            </button>
+            <h3 className="font-bold text-lg">{course.name}</h3>
+            <p className="text-sm text-gray-700">
+              Credit Hours: {course.creditHours}
             </p>
             <p className="text-sm text-gray-700">
-              Grade: {course.gradeLogs[0].grade}
+              Grade: {course.gradeLogs[0]?.grade || "N/A"}
             </p>
             <p className="text-sm text-gray-700">
-              GPA: {(course.gradeLogs[0].grade / 100) * course.creditHours}
+              GPA: {course.gradeLogs[0] ? calculateGPA(course.gradeLogs[0].grade).toFixed(2) : "N/A"}
+            </p>
+            <p className="text-sm text-gray-700">
+              Quality Points: {course.gradeLogs[0] ? (calculateGPA(course.gradeLogs[0].grade) * course.creditHours).toFixed(2) : "N/A"}
             </p>
           </div>
         ))}
