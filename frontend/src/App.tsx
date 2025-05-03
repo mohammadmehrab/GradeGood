@@ -1,56 +1,94 @@
-import { Link, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Dashboard from "./components/dashboard";
-import Login from "./components/login";
-import Signup from "./components/signup";
-import ForgotPassword from "./components/forgotpassword";
 import PrivateRoute from "./components/privateroute";
 import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
-import GradeInputPage from "./pages/GradeInputPage";
+import CourseSetUp from "./pages/CourseSetUp";
 import GPAcalc from "./pages/GPAcalc";
+import AppLayout from "./components/AppLayout";
+import AddEventPage from "./pages/AddEventPage";
+import GoalSet from "./pages/GoalSet";
+import PomodoroPage from "./pages/PomodoroPage";
+import CalendarPage from "./pages/CalendarPage";
+import ViewCourses from "./pages/ViewCourses";
 
 function App() {
   return (
-    <div>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light mb-4 shadow-sm">
-        <div className="container">
-          <Link className="navbar-brand" to="/">Home</Link>
-          <div className="collapse navbar-collapse">
-            <ul className="navbar-nav ms-auto">
-              <li className="nav-item">
-                <Link className="nav-link" to="/profile">Profile</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/inputGrade">Input Grade</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/gpacalc">GPA Calculator</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/dashboard">Dashboard</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/login">Login</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/signup">Signup</Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-
-      <Routes>
+    <Routes>
+      <Route element={<AppLayout />}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
-        <Route path="/inputGrade" element={<PrivateRoute><GradeInputPage /></PrivateRoute>} />
-        <Route path="/gpacalc" element={<PrivateRoute><GPAcalc /></PrivateRoute>} />
-        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-      </Routes>
-    </div>
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <ProfilePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/coursesetup"
+          element={
+            <PrivateRoute>
+              <CourseSetUp />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/gpacalc"
+          element={
+            <PrivateRoute>
+              <GPAcalc />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/addevent"
+          element={
+            <PrivateRoute>
+              <AddEventPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/goalset"
+          element={
+            <PrivateRoute>
+              <GoalSet />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/calendar"
+          element={
+            <PrivateRoute>
+              <CalendarPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/pomodoropage"
+          element={
+            <PrivateRoute>
+              <PomodoroPage />
+            </PrivateRoute>
+          }
+        />
+
+<Route
+          path="/viewcourses"
+          element={
+            <PrivateRoute>
+              <ViewCourses />
+            </PrivateRoute>
+          }
+        />
+
+        <Route path="/about" element={<HomePage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Route>
+    </Routes>
   );
 }
 

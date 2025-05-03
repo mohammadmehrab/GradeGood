@@ -1,5 +1,11 @@
-body {
-    background-color: aquamarine;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Special+Gothic+Expanded+One&display=swap');
+@import "tailwindcss";
+
+
+html, body, #root {
+    background-color: #C4E9D2;
+    margin: 0;
     height: 100%;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-family: "Roboto", sans-serif;
+    font-optical-sizing: auto;
 }

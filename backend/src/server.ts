@@ -1,80 +1,270 @@
-import express, { Request, RequestHandler, Response } from 'express'
-import { prisma } from './prisma'
-import dotenv from 'dotenv'
+import dotenv from "dotenv";
+import express, { Request, RequestHandler, Response } from "express";
+import { prisma } from "./prisma";
+import cors from "cors";
+import { Event, Recurrence } from "@prisma/client";
+import { datetimeToDate, timeToDate } from "./helper";
 
-dotenv.config({path: '../.env'})
+dotenv.config({ path: "../../.env" });
 
+const app = express();
+const port = 3000;
 
-const app = express()
-const port = 3000
-
-app.use(express.json())
+app.use(express.json());
+app.use(cors());
 
 type User = {
-    name: string;
-    email: string;
-}
+  firstName: string;
+  lastName: string;
+  email: string;
+};
 
-app.get('/', (req: Request, res: Response) => {
-    res.send("hi there")
-})
+type CourseRequest = {
+  name: string;
+  creditHours: number;
+  grade: number;
+  userId: number;
+  schedule: ScheduleDay[];
+};
 
-app.get('/users', async (req: Request, res: Response) => {
-    const result = await prisma.user.findMany()
+type EventRequest = {
+  title: string;
+  description: string;
+  startTime: string;
+  endTime: string;
+  userId: number;
+  courseId?: number;
+  recurrence: Recurrence;
+  date: string;
+};
 
-    res.send(result)
-})
+type ScheduleDay = {
+  dayOfWeek: string;
+  startTime: string;
+  endTime: string;
+};
 
-app.get('/users/:id', async (req: Request, res: Response) => {
-    const result = await prisma.user.findMany({
-        where: {
-            id: parseInt(req.params.id)
-        }
-    })
+app.get("/", (req: Request, res: Response) => {
+  res.send("hi there");
+});
 
-    res.send(result)
-})
+app.get("/users", async (req: Request, res: Response) => {
+  if (req.query.email) {
+    const result = await prisma.user.findFirst({
+      where: {
+        email: req.query.email as string,
+      },
+    });
+    res.send(result);
+  } else {
+    const result = await prisma.user.findMany();
+    res.send(result);
+  }
+});
 
+app.get("/users/:id", async (req: Request, res: Response) => {
+  const result = await prisma.user.findMany({
+    where: {
+      id: parseInt(req.params.id),
+    },
+  });
 
-app.post('/users', (async (req: Request, res: Response) => {
+  res.send(result);
+});
 
-    const body: User = req.body
+app.post("/users", (async (req: Request, res: Response) => {
+  const body: User = req.body;
 
-    if(!body || typeof body.name !== 'string' || typeof body.email !== 'string') {
-        return res.status(400).send({error: "Name and email are required."})
+  if (
+    !body ||
+    typeof body.firstName !== "string" ||
+    typeof body.email !== "string" ||
+    typeof body.lastName !== "string"
+  ) {
+    return res.status(400).send({ error: "Name and email are required." });
+  }
+
+  try {
+    const result = await prisma.user.create({
+      data: {
+        firstName: body.firstName,
+        lastName: body.lastName,
+        email: body.email,
+      },
+    });
+
+    res.send(result);
+  } catch (err: any) {
+    console.error("Error creating user:", err);
+    if (err.meta.target[0] === "email") {
+      res.status(400).send({ error: "Email already in use" });
+    } else {
+      res.status(500).send({ error: "Internal server error", blah: err });
     }
+  }
+}) as RequestHandler);
 
-    try {
-        const result = await prisma.user.create({
-            data: {
-                name: body.name,
-                email: body.email
-            }
-        })
-    
-        res.send(result)
-    } catch (err: any) {
-        console.error('Error creating user:', err)
-        if(err.meta.target[0] === 'email') {
-            res.status(400).send({error: 'Email already in use'})
-        } else {
-            res.status(500).send({error: 'Internal server error', blah: err})
-        }
-        
-    }
+app.put("/users", async (req: Request, res: Response): Promise<any> => {
+  const { email, firstName, lastName } = req.body;
 
-    
-}) as RequestHandler)
+  if (!email || !firstName || !lastName) {
+    return res.status(400).send({ error: "Email and name are required." });
+  }
 
-app.get('/users/:id/courses', async (req: Request, res: Response) => {//return all courses given user id
-    const result = await prisma.user.findMany({
-        where:{
-            id: parseInt(req.params.id)
-        }
-        })
+  try {
+    const user = await prisma.user.update({
+      where: { email },
+      data: { firstName, lastName },
+    });
 
-    res.send(result)
-})
+    res.send(user);
+  } catch (err: any) {
+    console.error("Error updating user:", err);
+    res.status(500).send({ error: "Could not update user." });
+  }
+});
 
+app.get("/users/:id/courses", async (req: Request, res: Response) => {
+  //return all courses given user id
+  const result = await prisma.course.findMany({
+    where: {
+      userId: parseInt(req.params.id),
+    },
+    include: {
+      gradeLogs: {
+        orderBy: {
+          datetime: "desc", // 👈 descending = newest first
+        },
+      },
+    },
+  });
 
-app.listen(port)
+  res.send(result);
+});
+
+app.post("/courses", (async (req: Request, res: Response) => {
+  const body: CourseRequest = req.body;
+
+  // console.log(body);
+
+  if (
+    !body ||
+    typeof body.name !== "string" ||
+    isNaN(body.creditHours) ||
+    isNaN(body.grade) ||
+    isNaN(body.userId) ||
+    typeof body.schedule !== "object"
+  ) {
+    return res.status(400).send({
+      error:
+        "Course name, Credit hours, Grade, User ID, and Schedule are required.",
+    });
+  }
+
+  try {
+    const result = await prisma.course.create({
+      data: {
+        name: body.name,
+        creditHours: body.creditHours,
+        gradeLogs: {
+          create: [{ datetime: new Date(), grade: body.grade }],
+        },
+        userId: body.userId,
+        events: {
+          create: body.schedule.map((day) => ({
+            title: body.name,
+            description: "",
+            startTime: timeToDate(day.dayOfWeek, day.startTime),
+            endTime: timeToDate(day.dayOfWeek, day.endTime),
+            userId: body.userId,
+            recurrence: Recurrence.WEEKLY,
+          })),
+        },
+      },
+      include: {
+        gradeLogs: true,
+      },
+    });
+
+    res.send(result);
+  } catch (err: any) {
+    console.error("Error creating course:", err);
+  }
+}) as RequestHandler);
+
+app.get("/users/:userId/events", async (req: Request, res: Response) => {
+  //return all courses given user id
+  const userId = parseInt(req.params.userId);
+
+  if (isNaN(userId)) {
+    res.status(400).json({ error: "Invalid User ID" });
+  }
+
+  try {
+    const events: Event[] = await prisma.event.findMany({
+      where: { userId },
+    });
+
+    res.json(events);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch events" });
+  }
+});
+
+app.post("/events", (async (req: Request, res: Response) => {
+  const body: EventRequest = req.body;
+
+  // console.log(body)
+
+  if (
+    !body ||
+    typeof body.title !== "string" ||
+    typeof body.description !== "string" ||
+    typeof body.startTime !== "string" ||
+    typeof body.endTime !== "string" ||
+    typeof body.date !== "string" ||
+    isNaN(body.userId)
+  ) {
+    return res.status(400).send({
+      error:
+        "Event title, description, start time, end time, date, and User ID are required.",
+    });
+  }
+
+  try {
+    const startTimeTemp = timeToDate("Monday", body.startTime);
+
+    const endTimeTemp = timeToDate("Monday", body.endTime);
+
+    const startTime = new Date(body.date);
+
+    startTime.setHours(
+      startTimeTemp.getHours(),
+      startTimeTemp.getMinutes(),
+      0,
+      0
+    );
+
+    const endTime = new Date(body.date);
+
+    endTime.setHours(endTimeTemp.getHours(), endTimeTemp.getMinutes(), 0, 0);
+
+    const result = await prisma.event.create({
+      data: {
+        title: body.title,
+        description: body.description,
+        startTime: startTime,
+        endTime: endTime,
+        userId: body.userId,
+        recurrence: body.recurrence || Recurrence.NONE,
+      },
+    });
+
+    res.send(result);
+  } catch (err: any) {
+    console.error("Error creating event:", err);
+  }
+}) as RequestHandler);
+
+app.listen(port);
