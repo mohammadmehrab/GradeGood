@@ -77,8 +77,4 @@ app.get('/users/:id/courses', async (req: Request, res: Response) => {//return a
 })
 
 
-
-
-
-
 app.listen(port)
